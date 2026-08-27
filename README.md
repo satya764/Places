@@ -1,4 +1,6 @@
 # Places
+<img width="992" height="1778" alt="Screen Recording 2026-08-26 at 11 09 22 PM" src="https://github.com/user-attachments/assets/b83e71dd-e503-43dc-a6ba-ccf290d8739c" />
+
 
 An offline-first iOS app for saving and organizing places, with real cloud sync. It works fully offline; changes queue locally and sync to a live backend when a connection is available, with conflict resolution on top.
 
