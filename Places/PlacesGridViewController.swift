@@ -1,4 +1,5 @@
 import UIKit
+import SwiftUI
 
 final class PlacesGridViewController: UIViewController {
 
@@ -21,8 +22,13 @@ final class PlacesGridViewController: UIViewController {
         setupStatusBar()
         setupDataSource()
 
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
+
+        let addButton = UIBarButtonItem(
             barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        let mapButton = UIBarButtonItem(
+            image: UIImage(systemName: "map"),
+            style: .plain, target: self, action: #selector(mapTapped))
+        navigationItem.rightBarButtonItems = [addButton, mapButton]
         navigationItem.leftBarButtonItem = UIBarButtonItem(
             image: UIImage(systemName: "arrow.triangle.2.circlepath"),
             style: .plain, target: self, action: #selector(statusTapped))
@@ -102,6 +108,13 @@ final class PlacesGridViewController: UIViewController {
         let names = ["Balboa Park", "Sunset Cliffs", "Little Italy", "La Jolla Cove"]
         viewModel.add(title: names.randomElement()!, note: "want to visit",
                       latitude: 32.7157, longitude: -117.1611)
+    }
+    
+    @objc private func mapTapped() {
+        let mapView = PlacesMapView(places: viewModel.places)
+        let host = UIHostingController(rootView: mapView)
+        host.title = "Map"
+        navigationController?.pushViewController(host, animated: true)
     }
 
     @objc private func statusTapped() {
