@@ -1,35 +1,36 @@
 # Places
+
 ![CI](https://github.com/satya764/Places/actions/workflows/ci.yml/badge.svg)
 
-
+An offline-first iOS app for saving and organizing places, with real cloud sync. It works fully offline; changes queue locally and sync to a live backend when a connection is available, with conflict resolution on top.
 
 https://github.com/user-attachments/assets/40bd7ade-4e39-4893-95ec-39c8f3be23af
-
-
-An offline-first iOS app for saving and organizing places, with real cloud sync. It works fully offline; changes queue locally and sync to a live backend when a connection is available, with conflict resolution on top.
 
 ## What this demonstrates
 
 - **Offline-first architecture** — the local store is the source of truth; the network is a background reconciler, never in the path of a user action.
 - **Real cloud sync** — writes go to a live Firebase Firestore database and are readable across devices, not a local mock.
 - **A real sync engine** — an outbound mutation queue, batched pushes, delta pulls, and last-write-wins conflict resolution.
-- **UIKit + programmatic Auto Layout** across three screens (grid, detail/edit, sync status), no storyboards.
+- **UIKit + programmatic Auto Layout** across four screens (grid, detail/edit, sync status, map), no storyboards.
+- **SwiftUI + UIKit interop** — a SwiftUI map screen embedded in the UIKit navigation stack via `UIHostingController`.
+- **MapKit + CoreLocation** — saved places shown as pins on a live map, with the user's current location.
 - **MVVM** with a protocol-based design so the backend and store are swappable and testable.
-- **Unit-tested sync logic** — conflict resolution and queue behavior are covered by tests.
+- **Unit-tested sync logic** — conflict resolution and queue behavior are covered by tests, run automatically in CI.
 
 ## Screens
 
 - **Grid** — a `UICollectionView` (compositional layout + diffable data source) of saved places, each showing a sync-state dot: green (synced), orange (pending), red (conflict).
 - **Detail / Edit** — edit a place's title and note; changes write locally and sync in the background.
 - **Sync Status** — pending queue count, last-synced time, conflicts resolved, and a force-sync action.
+- **Map** — a SwiftUI `Map` (MapKit) showing all saved places as pins plus the user's location; pushed from the UIKit grid via `UIHostingController`, demonstrating SwiftUI/UIKit interop.
 
 ## Architecture
 
 ```
-View (UIKit) -> ViewModel (@MainActor) -> Store (local, source of truth)
- \-> SyncEngine -> RemoteAPI (protocol)
- |
- MockRemoteAPI / FirestoreRemoteAPI
+View (UIKit + SwiftUI)  ->  ViewModel (@MainActor)  ->  Store (local, source of truth)
+                                                    \->  SyncEngine  ->  RemoteAPI (protocol)
+                                                                         |
+                                                              MockRemoteAPI / FirestoreRemoteAPI
 ```
 
 The `RemoteAPI` protocol makes the backend a swappable dependency. The app was built and tested against an in-memory mock, then moved to a live Firebase Firestore backend by swapping a single implementation — the sync engine did not change. That seam is the main design decision: the UI and the sync engine never know how or where data is stored.
@@ -48,31 +49,29 @@ Live cloud sync runs on **Firebase Firestore**. Each place is a document in a `p
 
 ## Tech
 
-Swift, UIKit, MVVM, programmatic Auto Layout, `UICollectionView` with compositional layout and a diffable data source, async/await, Firebase Firestore, XCTest.
+Swift, UIKit, SwiftUI, MVVM, programmatic Auto Layout, `UICollectionView` with compositional layout and a diffable data source, MapKit, CoreLocation, async/await, Firebase Firestore, XCTest, GitHub Actions CI.
 
 ## Testing
 
-The sync engine is tested as pure logic with no UI or real network — conflict resolution picks the correct winner, the mutation queue flushes and clears correctly, and tombstones propagate. Run with `Cmd+U` in Xcode.
+The sync engine is tested as pure logic with no UI or real network — conflict resolution picks the correct winner, the mutation queue flushes and clears correctly, and tombstones propagate. Run locally with `Cmd+U` in Xcode.
+
+## Continuous Integration
+
+Every push to `main` runs the full XCTest suite on GitHub Actions (macOS runner). Build and test status is visible in the **Actions** tab and reflected in the badge above.
 
 ## Status
 
-A working app with a full sync engine, passing unit tests, and **live cloud sync via Firebase Firestore**.
+A working app with a full sync engine, live cloud sync via Firebase Firestore, a SwiftUI MapKit screen, passing unit tests, and CI on every push.
 
-Next steps:
+**Next steps:**
 - A visible conflict-resolution demo (simulate a remote edit and watch it resolve)
-- A MapKit thumbnail per place
+- SwiftData migration for local persistence
 - Ship to TestFlight
 
 ## Development & AI-Assisted Workflow
 
-Built this project using AI coding assistants (Claude, GitHub Copilot) as a
-pair-programming tool, while owning the architecture and verifying every output.
-I used AI to move faster on boilerplate and to explore approaches, then reviewed,
-tested, and adjusted the generated code against the app's real requirements —
-for example, validating the sync engine's conflict-resolution logic with unit
-tests rather than trusting generated code as-is. The design decisions (offline-first
-architecture, the swappable RemoteAPI protocol, last-write-wins conflict handling)
-and the verification are mine.
+Built this project using AI coding assistants (Claude, GitHub Copilot) as a pair-programming tool, while owning the architecture and verifying every output. I used AI to move faster on boilerplate and to explore approaches, then reviewed, tested, and adjusted the generated code against the app's real requirements — for example, validating the sync engine's conflict-resolution logic with unit tests rather than trusting generated code as-is. The design decisions (offline-first architecture, the swappable `RemoteAPI` protocol, last-write-wins conflict handling) and the verification are mine.
+
 ## Author
 
 Satya — [github.com/satya764](https://github.com/satya764)
