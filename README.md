@@ -59,6 +59,16 @@ Next steps:
 - A MapKit thumbnail per place
 - Ship to TestFlight
 
+## Development & AI-Assisted Workflow
+
+Built this project using AI coding assistants (Claude, GitHub Copilot) as a
+pair-programming tool, while owning the architecture and verifying every output.
+I used AI to move faster on boilerplate and to explore approaches, then reviewed,
+tested, and adjusted the generated code against the app's real requirements —
+for example, validating the sync engine's conflict-resolution logic with unit
+tests rather than trusting generated code as-is. The design decisions (offline-first
+architecture, the swappable RemoteAPI protocol, last-write-wins conflict handling)
+and the verification are mine.
 ## Author
 
 Satya — [github.com/satya764](https://github.com/satya764)
