@@ -1,4 +1,5 @@
 # Places
+![CI](https://github.com/satya764/Places/actions/workflows/ci.yml/badge.svg)
 <img width="992" height="1778" alt="Screen Recording 2026-08-26 at 11 09 22 PM" src="https://github.com/user-attachments/assets/b83e71dd-e503-43dc-a6ba-ccf290d8739c" />
 
 
