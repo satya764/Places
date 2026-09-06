@@ -2,6 +2,10 @@
 ![CI](https://github.com/satya764/Places/actions/workflows/ci.yml/badge.svg)
 
 
+
+https://github.com/user-attachments/assets/40bd7ade-4e39-4893-95ec-39c8f3be23af
+
+
 An offline-first iOS app for saving and organizing places, with real cloud sync. It works fully offline; changes queue locally and sync to a live backend when a connection is available, with conflict resolution on top.
 
 ## What this demonstrates
